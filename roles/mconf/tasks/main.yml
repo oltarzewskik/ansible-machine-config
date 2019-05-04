@@ -1,0 +1,6 @@
+---
+- import_tasks: create_dotfiles.yml
+- import_tasks: install_packages.yml
+- import_tasks: neovim_conf.yml
+- import_tasks: vscode.yml
+- import_tasks: git.yml

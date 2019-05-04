@@ -1,0 +1,27 @@
+---
+- name: Create nvim folder in .config
+  file:
+    path: '/home/{{username}}/.config/nvim/'
+    owner: '{{ username }}'
+    group: '{{ username }}'
+    state: directory
+    mode: '755'
+
+- name: Check that init.vim file exists
+  stat:
+    path: /home/{{ username }}/.config/nvim/init.vim
+  register: stat_for_init_result
+
+- name: Delete init.vim file if exists
+  file:
+    path: /home/{{ username }}/.config/nvim/init.vim
+    state: absent
+  when: stat_for_init_result.stat.exists == True
+
+- name: Download my init.vim file and apply it
+  get_url:
+    url: https://raw.githubusercontent.com/oltarzewskik/personal-configs/master/neovim/init.vim
+    dest: /home/{{ username }}/.config/nvim
+    owner: '{{ username }}'
+    group: '{{ username }}'
+    mode: '755'

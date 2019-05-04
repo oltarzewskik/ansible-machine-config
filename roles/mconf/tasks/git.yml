@@ -1,0 +1,19 @@
+---
+- name: Check that .gitconfig file exists
+  stat:
+    path: /home/{{ username }}/.gitconfig
+  register: stat_for_gitconfig_result
+
+- name: Delete .gitconfig file if exists
+  file:
+    path: /home/{{ username }}/.gitconfig
+    state: absent
+  when: stat_for_gitconfig_result.stat.exists == True
+
+- name: Download my .gitconfig file and apply it
+  get_url:
+    url: https://raw.githubusercontent.com/oltarzewskik/personal-configs/master/git/.gitconfig
+    dest: /home/{{ username }}
+    owner: '{{ username }}'
+    group: '{{ username }}'
+    mode: '755'

@@ -1,0 +1,24 @@
+---
+- name: Install vscode
+  include_role:
+    name: gantsign.visual-studio-code
+    tasks_from: install
+
+- name: Check that settings.json file exists
+  stat:
+    path: /home/{{ username }}/.config/Code/User/settings.json
+  register: stat_for_settings_result
+
+- name: Delete settings.json file if exists
+  file:
+    path: /home/{{ username }}/.config/Code/User/settings.json
+    state: absent
+  when: stat_for_settings_result.stat.exists == True
+
+- name: Download my settings.json file and apply it
+  get_url:
+    url: https://raw.githubusercontent.com/oltarzewskik/personal-configs/master/vscode/settings.json
+    dest: /home/{{ username }}/.config/Code/User
+    owner: '{{ username }}'
+    group: '{{ username }}'
+    mode: '755'
