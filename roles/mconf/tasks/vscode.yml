@@ -4,6 +4,14 @@
     name: gantsign.visual-studio-code
     tasks_from: install
 
+- name: Make sure that ~/.config/Code/User/ path exists
+  file:
+    path: /home/{{ username }}/.config/Code/User
+    owner: '{{ username }}'
+    group: '{{ username }}'
+    state: directory
+    mode: 0755
+
 - name: Check that settings.json file exists
   stat:
     path: /home/{{ username }}/.config/Code/User/settings.json
